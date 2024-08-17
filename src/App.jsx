@@ -10,6 +10,7 @@ import Register from "./Pages/Register/Register";
 import Navbar from "./Components/Navbar/Navbar";
 import CreateRecipe from "./Pages/CreateRecipe/CreateRecipe";
 import RecipeDisplay from "./Pages/RecipeDisplay/RecipeDisplay";
+import { Notifications } from "@mantine/notifications";
 
 function App() {
   const router = createBrowserRouter([
@@ -57,7 +58,7 @@ function App() {
       ),
     },
     {
-      path: "/Recipe",
+      path: "/Recipe/:recipeId",
 
       element: (
         <>
@@ -68,6 +69,7 @@ function App() {
   ]);
   return (
     <MantineProvider>
+      <Notifications />
       <RouterProvider router={router} />
     </MantineProvider>
   );

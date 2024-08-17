@@ -1,12 +1,6 @@
-import {
-  Card,
-  Image,
-  Text,
-  Badge,
-  Group,
-  ActionIcon,
-  Rating
-} from "@mantine/core";
+/* eslint-disable react/prop-types */
+import { Card, Image, Text, Badge, ActionIcon, Flex } from "@mantine/core";
+import { Clock, Star } from "@phosphor-icons/react";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +8,7 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate("/recipe"); 
+    navigate("/recipe/8461l8uXPtSbAQUmJ5FR");
   };
 
   return (
@@ -31,7 +25,7 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
       variant="default"
     >
       <Card.Section>
-        <Image src={recipe.image} height={160} alt={recipe.name} />
+        <Image src={recipe.image} height={160} alt={recipe.recipeName} />
         <ActionIcon
           variant={"filled"}
           color="rgba(255, 255, 255, 1)"
@@ -53,29 +47,39 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
           )}
         </ActionIcon>
         <Badge
-          color="pink"
+          color="black"
           variant="white"
           style={{
             position: "absolute",
             top: 130,
             left: 10,
           }}
+          size="md"
         >
-          {recipe.cookTime} mins{" "}
+          <Flex align={"center"} gap={4}>
+            <Clock size={16} /> {recipe?.cookingTime} min{" "}
+          </Flex>
         </Badge>
       </Card.Section>
 
-      <Group justify="space-between" mt="md" mb="xs">
-        <Text weight={500}>{recipe.name}</Text>
-        <Group justify="end" mt="md" mb="xs">
-          <Rating size="xs" defaultValue={0} value={recipe.avgRating} readOnly />
-          <Text size="sm">{recipe.avgRating}</Text>
-        </Group>
-      </Group>
+      <Flex align={"center"} justify="space-between" mt="md" mb="xs">
+        <Text fw={600}>{recipe?.recipeName}</Text>
+        <Flex align={"center"} gap={5}>
+          <Star weight="fill" color="orange" size={20} />
+          <Text fw={600}>{recipe?.avgRating}</Text>
+        </Flex>
+      </Flex>
 
       <Text size="sm" c="dimmed">
-        {recipe.description}
+        {recipe?.description?.split(" ").slice(0, 15).join(" ")}...
       </Text>
+      <Flex align={"center"} wrap={"wrap"} mt="md" gap={8}>
+        {recipe.tags?.split(",").map((tag, index) => (
+          <Badge key={index} color="gray">
+            {tag}
+          </Badge>
+        ))}
+      </Flex>
     </Card>
   );
 }

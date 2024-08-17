@@ -1,19 +1,18 @@
 import { useState } from "react";
-import {
-  BowlSteam,
-  Heart,
-  House,
-  PlusCircle,
-  UserCircle,
-} from "@phosphor-icons/react";
+import { BowlSteam, Heart, House, PlusCircle } from "@phosphor-icons/react";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
-import Navbarmenu from "./Components/Navbarmenu";
+import useAuth from "../../Hooks/useAuth";
+import { Avatar, Button } from "@mantine/core";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase";
+import ProfileMenu from "./Components/Profilemenu";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace with actual login state
+  const { isLoggedIn, user } = useAuth();
+
   const { width } = useViewportSize();
   const [activePage, setActivePage] = useState(location.pathname);
 
@@ -21,7 +20,11 @@ const Navbar = () => {
     { name: "/", icon: House, label: "Home" },
     { name: "/CreateRecipe", icon: PlusCircle, label: "Create Recipe" },
     { name: "/Favorites", icon: Heart, label: "Favorites", color: "red" },
-    { name: "/Profile", icon: UserCircle, label: "Nawang" },
+  ];
+
+  const authItems = [
+    { name: "/login", label: "Login" },
+    { name: "/register", label: "Register" },
   ];
 
   return (
@@ -71,56 +74,62 @@ const Navbar = () => {
             alignItems: "center",
           }}
         >
-          {width <= 600 && <Navbarmenu />}
-          {width > 600 && (
-            <>
-              {navItems.map((item) => {
-                const isActive = activePage === item.name;
-                return (
-                  <NavLink
-                    key={item.label}
-                    to={item.name}
-                    onClick={() => {
-                      navigate(item.name);
-                      setActivePage(item.name);
-                    }}
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      padding: "5px 15px",
-                      fontWeight: isActive ? "bold" : "500",
-                      color: isActive && item.color ? item.color : undefined,
-                      textDecoration: "none",
-                    }}
-                  >
-                    {width > 780 && (
-                      <item.icon
-                        size={22}
-                        weight={isActive ? "fill" : "regular"}
-                        color={
-                          item.name === "/Favorites" && isActive
-                            ? "red"
-                            : undefined
-                        }
-                      />
-                    )}
-                    {(width > 600 && width <= 780) || width > 780 ? (
-                      <p
-                        style={{
-                          fontSize: "17px",
-                          fontWeight: isActive ? "bold" : "500",
-                        }}
-                      >
-                        {item.label}
-                      </p>
-                    ) : null}
-                  </NavLink>
-                );
-              })}
-            </>
-          )}
+          {isLoggedIn &&
+            navItems.map((item) => {
+              const isActive = activePage === item.name;
+              return (
+                <NavLink
+                  key={item.label}
+                  to={item.name}
+                  onClick={() => {
+                    navigate(item.name);
+                    setActivePage(item.name);
+                  }}
+                  style={{
+                    display: "flex",
+                    gap: "5px",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    padding: "5px 15px",
+                    fontWeight: isActive ? "bold" : "500",
+                    color: isActive && item.color ? item.color : undefined,
+                    textDecoration: "none",
+                  }}
+                >
+                  <item.icon
+                    size={width > 780 ? 24 : 30}
+                    weight={isActive ? "fill" : "regular"}
+                    color={
+                      item.name === "/Favorites" && isActive ? "red" : undefined
+                    }
+                  />
+                  {width > 780 && (
+                    <p
+                      style={{
+                        fontSize: "17px",
+                        fontWeight: isActive ? "bold" : "500",
+                      }}
+                    >
+                      {item.label}
+                    </p>
+                  )}
+                </NavLink>
+              );
+            })}
+
+          {!isLoggedIn &&
+            authItems.map((item, key) => (
+              <Button
+                onClick={() => navigate(item.name)}
+                mr={10}
+                color={key === 0 ? "black" : "blue"}
+                variant={key === 0 ? "outline" : "filled"}
+                key={key}
+              >
+                {item.label}
+              </Button>
+            ))}
+          {isLoggedIn && <ProfileMenu />}
         </div>
       </div>
     </div>

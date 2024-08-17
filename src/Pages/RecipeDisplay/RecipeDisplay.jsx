@@ -11,31 +11,38 @@ import {
   Textarea,
 } from "@mantine/core";
 import { ArrowLeft, Clock } from "@phosphor-icons/react";
-import { useNavigate } from "react-router-dom";
-
-// Sample data for ingredients
-const ingredients = [
-  { name: "All-purpose flour", quantity: "2 cups (280 grams)" },
-  { name: "Salt", quantity: "1 teaspoon" },
-  { name: "Active dry yeast", quantity: "1 teaspoon" },
-  { name: "Water", quantity: "2⁄3 cup plus 2 tablespoons, divided" },
-  { name: "Sugar", quantity: "2 teaspoons" },
-];
-const tags = ["Tibetan", "Bread", "Steamed", "Buns"];
-// Sample data for steps
-const steps = [
-  "In a large bowl, combine flour, salt, and yeast.",
-  "Gradually add water and mix until a dough forms.",
-  "Knead the dough on a floured surface for about 10 minutes.",
-  "Let the dough rise in a warm place for 1 hour, or until doubled in size.",
-  "Divide the dough into small pieces and shape them into buns.",
-  "Steam the buns for about 15 minutes, or until cooked through.",
-  "Serve with your choice of accompaniment, such as phing sha or shapta.",
-];
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { db } from "../../../firebase";
 
 const RecipeDisplay = () => {
-  const navigate = useNavigate();
+  const [recipe, setRecipe] = useState(null);
 
+  const navigate = useNavigate();
+  const { recipeId } = useParams();
+  console.log(recipeId);
+  useEffect(() => {
+    async function fetchRecipe() {
+      try {
+        const recipeRef = doc(db, "recipes", recipeId);
+        const recipeSnap = await getDoc(recipeRef);
+
+        if (recipeSnap.exists()) {
+          setRecipe(recipeSnap.data());
+          console.log(recipeSnap.data()); // Set the recipe data to state
+        } else {
+          console.log("No such recipe!");
+        }
+      } catch (error) {
+        console.error("Error fetching recipe:", error);
+      } finally {
+        // setLoading(false); // Set loading to false once fetching is done
+      }
+    }
+
+    fetchRecipe(); // Call the async function to fetch the recipe
+  }, [recipeId]); // Dependency array to re-run the effect if recipeId changes
   return (
     <div
       style={{
@@ -56,7 +63,7 @@ const RecipeDisplay = () => {
         <ArrowLeft size={30} />
       </ActionIcon>
       <Text pt={10} size="2.5rem" fw={500}>
-        Tingmo
+        {recipe?.recipeName}
       </Text>
       <Flex mt={10} align={"center"} gap={"md"}>
         <Rating size="md" defaultValue={4} readOnly />
@@ -69,28 +76,13 @@ const RecipeDisplay = () => {
         </Text>
       </Text>
       <Text size="md" mt={10}>
-        It probably depends on which part of the world you live in. If you’re in
-        North America, it may be the famous Tibetan butter tea, or bhocha, as it
-        is known to Tibetans, which inspired the once-viral bulletproof coffee
-        trend. But if you live in the Himalayan region of India, Bhutan, or
-        Nepal, home to some of the largest Tibetan exile settlements of the past
-        seven decades, you will likely know of momo, Tibetan dumplings that have
-        become widely adopted in these Himalayan countries. Tingmomo is another
-        Tibetan treat you should know. A steamed bun with a soft, fluffy
-        texture, its name, some say, is a contraction of tingba, the Tibetan
-        word for “cloud,” and momo, the Tibetan word for “dumpling.” The buns,
-        called tingmo for short, are typically paired with phing sha, a savory
-        stir-fry of glass noodles with mokru (wood ear mushrooms) and chunks of
-        meat; or with shapta, thinly sliced meat stir-fried with velvety gravy
-        that you sop up with pieces of tingmo.
+        {recipe?.description}
       </Text>
       <Image
         mt={10}
         h={300}
         radius="md"
-        src={
-          "https://cdn.vox-cdn.com/thumbor/uS9IylxD7qaQBSjim_5AcFgyOzE=/0x0:4124x2842/620x413/filters:focal(1733x1092:2391x1750):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/69417084/VICTA_EATER_TINGMOMO_HORIZONTAL_SOLO.0.jpg"
-        }
+        src={recipe?.image}
         alt="Recipe Image"
       />
       <Flex align={"center"} gap={5} mt={15}>
@@ -98,7 +90,7 @@ const RecipeDisplay = () => {
         <Text>
           Ready in:{" "}
           <Text fw={600} component="span">
-            90 minutes
+            {recipe?.cookingTime} minute
           </Text>
         </Text>
       </Flex>
@@ -119,7 +111,7 @@ const RecipeDisplay = () => {
             gap: "10px",
           }}
         >
-          {ingredients.map((ingredient, index) => (
+          {recipe?.ingredients?.map((ingredient, index) => (
             <div key={index}>
               <Text size="lg">
                 {ingredient.quantity}{" "}
@@ -148,7 +140,7 @@ const RecipeDisplay = () => {
             gap: "10px",
           }}
         >
-          {steps.map((step, index) => (
+          {recipe?.steps?.map((step, index) => (
             <div
               key={index}
               style={{ display: "flex", alignItems: "flex-start" }}
@@ -165,7 +157,7 @@ const RecipeDisplay = () => {
         <Flex mt={20} align={"center"} gap={10}>
           <Text size="lg">Tags:</Text>
           <Flex align={"center"} gap={"sm"}>
-            {tags.map((tag, index) => (
+            {recipe?.tags.split(",").map((tag, index) => (
               <Pill key={index}>{tag}</Pill>
             ))}
           </Flex>
