@@ -44,7 +44,6 @@ function Home() {
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {searchTerm && (
         <Text pt={15}>
-          {" "}
           {filteredRecipes.length}{" "}
           {filteredRecipes.length > 1 ? "recipes" : "recipe"} found for "
           {searchTerm}"
@@ -59,15 +58,12 @@ function Home() {
             marginTop: "20px",
           }}
         >
-          {filteredRecipes.length > 0 ? (
+          {filteredRecipes.length > 0 &&
             filteredRecipes.map((recipe, index) => (
               <>
                 <RecipeCard key={index} recipe={recipe} />
               </>
-            ))
-          ) : (
-            <p>No recipes found</p>
-          )}
+            ))}
         </div>
       )}
       {!searchTerm && (
