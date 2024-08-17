@@ -5,25 +5,24 @@ import RecipeCard from "../../Components/RecipeCard";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  
   const recipes = [
     {
       name: "ShaMomos",
-      image:
-        "https://data.tibettravel.org/assets/images/tibetan-food/momo11.jpg",
+      image: "https://data.tibettravel.org/assets/images/tibetan-food/momo11.jpg",
       cookTime: 45,
       description: "Delicious dumplings filled with meat.",
     },
     {
       name: "Tingmo",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu9bnwA_Ny2wUfuJcuMf_JhhTY4Smq27ekLA&s",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu9bnwA_Ny2wUfuJcuMf_JhhTY4Smq27ekLA&s",
       cookTime: 20,
       description: "A soft, fluffy steamed bun.",
     },
     {
       name: "Tibetan Butter Tea",
-      image:
-        "https://cdn.shopify.com/s/files/1/2669/5944/files/butter_tea_shutterstock_333184121_600x600.jpg?v=1612914596",
+      image: "https://cdn.shopify.com/s/files/1/2669/5944/files/butter_tea_shutterstock_333184121_600x600.jpg?v=1612914596",
       cookTime: 8,
       description: "A salty tea made with yak butter and salt",
     },
@@ -32,6 +31,14 @@ function Home() {
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const toggleFavorite = (recipe) => {
+    if (favoriteRecipes.some((fav) => fav.name === recipe.name)) {
+      setFavoriteRecipes(favoriteRecipes.filter((fav) => fav.name !== recipe.name));
+    } else {
+      setFavoriteRecipes([...favoriteRecipes, recipe]);
+    }
+  };
 
   return (
     <div
@@ -60,9 +67,12 @@ function Home() {
         >
           {filteredRecipes.length > 0 &&
             filteredRecipes.map((recipe, index) => (
-              <>
-                <RecipeCard key={index} recipe={recipe} />
-              </>
+              <RecipeCard
+                key={index}
+                recipe={recipe}
+                isFavorited={favoriteRecipes.some((fav) => fav.name === recipe.name)}
+                onToggleFavorite={toggleFavorite}
+              />
             ))}
         </div>
       )}
@@ -84,7 +94,12 @@ function Home() {
             }}
           >
             {recipes.map((recipe, index) => (
-              <RecipeCard key={index} recipe={recipe} />
+              <RecipeCard
+                key={index}
+                recipe={recipe}
+                isFavorited={favoriteRecipes.some((fav) => fav.name === recipe.name)}
+                onToggleFavorite={toggleFavorite}
+              />
             ))}
           </div>
         </div>

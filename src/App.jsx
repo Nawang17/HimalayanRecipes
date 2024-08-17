@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
-
+import Favorites from "./Pages/Favorites/Favorites";
 import Register from "./Pages/Register/Register";
 import Navbar from "./Components/Navbar/Navbar";
 import CreateRecipe from "./Pages/CreateRecipe/CreateRecipe";
@@ -35,6 +35,15 @@ function App() {
       element: (
         <>
           <Navbar /> <Register />,
+        </>
+      ),
+    },
+    {
+      path: "/Favorites",
+
+      element: (
+        <>
+          <Navbar /> <Favorites />,
         </>
       ),
     },

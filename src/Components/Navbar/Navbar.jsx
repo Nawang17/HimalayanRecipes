@@ -6,17 +6,16 @@ import {
   PlusCircle,
   UserCircle,
 } from "@phosphor-icons/react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
 import Navbarmenu from "./Components/Navbarmenu";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [activePage, setActivePage] = useState(location.pathname);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace with actual login state
   const { width } = useViewportSize();
+  const [activePage, setActivePage] = useState(location.pathname);
 
   const navItems = [
     { name: "/", icon: House, label: "Home" },
@@ -53,10 +52,7 @@ const Navbar = () => {
             gap: "4px",
             cursor: "pointer",
           }}
-          onClick={() => {
-            navigate("/");
-            setActivePage("/");
-          }}
+          onClick={() => navigate("/")}
         >
           <BowlSteam size={32} />
           <p
@@ -78,44 +74,51 @@ const Navbar = () => {
           {width <= 600 && <Navbarmenu />}
           {width > 600 && (
             <>
-              {navItems.map((item) => (
-                <div
-                  key={item.label}
-                  onClick={() => {
-                    navigate(item.name);
-                    setActivePage(item.name);
-                  }}
-                  style={{
-                    display: "flex",
-                    gap: "5px",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    padding: "5px 15px",
-                  }}
-                >
-                  {width > 780 && (
-                    <item.icon
-                      size={22}
-                      weight={activePage === item.name ? "fill" : "regular"}
-                      color={
-                        item.name === "/Favorites" && activePage === item.name
-                          ? "red"
-                          : undefined
-                      }
-                    />
-                  )}
-                  {(width > 600 && width <= 780) || width > 780 ? (
-                    <p
-                      style={{
-                        fontSize: "17px",
-                        fontWeight: activePage === item.name ? "bold" : "500",
-                      }}
-                    >
-                      {item.label}
-                    </p>
-                  ) : null}
-                </div>
-              ))}
+              {navItems.map((item) => {
+                const isActive = activePage === item.name;
+                return (
+                  <NavLink
+                    key={item.label}
+                    to={item.name}
+                    onClick={() => {
+                      navigate(item.name);
+                      setActivePage(item.name);
+                    }}
+                    style={{
+                      display: "flex",
+                      gap: "5px",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      padding: "5px 15px",
+                      fontWeight: isActive ? "bold" : "500",
+                      color: isActive && item.color ? item.color : undefined,
+                      textDecoration: "none",
+                    }}
+                  >
+                    {width > 780 && (
+                      <item.icon
+                        size={22}
+                        weight={isActive ? "fill" : "regular"}
+                        color={
+                          item.name === "/Favorites" && isActive
+                            ? "red"
+                            : undefined
+                        }
+                      />
+                    )}
+                    {(width > 600 && width <= 780) || width > 780 ? (
+                      <p
+                        style={{
+                          fontSize: "17px",
+                          fontWeight: isActive ? "bold" : "500",
+                        }}
+                      >
+                        {item.label}
+                      </p>
+                    ) : null}
+                  </NavLink>
+                );
+              })}
             </>
           )}
         </div>
