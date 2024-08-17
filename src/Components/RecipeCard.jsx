@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 function RecipeCard({ recipe }) {
+  const navigate = useNavigate();
+
   return (
     <Card
       style={{ width: "300px" }}
@@ -25,7 +28,13 @@ function RecipeCard({ recipe }) {
         {recipe.description}
       </Text>
 
-      <Button color="blue" fullWidth mt="md" radius="md">
+      <Button
+        onClick={() => navigate("/recipe")}
+        color="blue"
+        fullWidth
+        mt="md"
+        radius="md"
+      >
         View Recipe
       </Button>
     </Card>

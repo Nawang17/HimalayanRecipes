@@ -7,7 +7,10 @@ import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
 
 import Register from "./Pages/Register/Register";
-import Navbar from "./Components/Navbar";
+import Navbar from "./Components/Navbar/Navbar";
+import CreateRecipe from "./Pages/CreateRecipe/CreateRecipe";
+import RecipeDisplay from "./Pages/RecipeDisplay/RecipeDisplay";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -32,6 +35,24 @@ function App() {
       element: (
         <>
           <Navbar /> <Register />,
+        </>
+      ),
+    },
+    {
+      path: "/CreateRecipe",
+
+      element: (
+        <>
+          <Navbar /> <CreateRecipe />,
+        </>
+      ),
+    },
+    {
+      path: "/Recipe",
+
+      element: (
+        <>
+          <Navbar /> <RecipeDisplay />,
         </>
       ),
     },

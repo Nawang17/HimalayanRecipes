@@ -8,6 +8,7 @@ import {
 } from "@phosphor-icons/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
+import Navbarmenu from "./Components/Navbarmenu";
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,7 +20,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: "/", icon: House, label: "Home" },
-    { name: "/Add Recipe", icon: PlusCircle, label: "Add Recipe" },
+    { name: "/CreateRecipe", icon: PlusCircle, label: "Create Recipe" },
     { name: "/Favorites", icon: Heart, label: "Favorites", color: "red" },
     { name: "/Profile", icon: UserCircle, label: "Nawang" },
   ];
@@ -32,7 +33,7 @@ const Navbar = () => {
         right: "0",
         position: "sticky",
         backgroundColor: "white",
-        zIndex: "999",
+        zIndex: "888",
         borderBottom: "1px solid #e0e0e0",
       }}
     >
@@ -74,44 +75,14 @@ const Navbar = () => {
             alignItems: "center",
           }}
         >
-          {!isLoggedIn ? (
-            <>
-              <div
-                style={{
-                  cursor: "pointer",
-                  padding: "5px 15px",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "5px",
-                  marginLeft: "5px",
-                }}
-                onClick={() => {
-                  navigate("/Login");
-                }}
-              >
-                Login
-              </div>
-              <div
-                style={{
-                  cursor: "pointer",
-                  padding: "5px 15px",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "5px",
-                  marginLeft: "5px",
-                }}
-                onClick={() => {
-                  navigate("/Register");
-                }}
-              >
-                Register
-              </div>
-            </>
-          ) : (
+          {width <= 600 && <Navbarmenu />}
+          {width > 600 && (
             <>
               {navItems.map((item) => (
                 <div
                   key={item.label}
                   onClick={() => {
-                    // navigate(item.name);
+                    navigate(item.name);
                     setActivePage(item.name);
                   }}
                   style={{
@@ -122,16 +93,18 @@ const Navbar = () => {
                     padding: "5px 15px",
                   }}
                 >
-                  <item.icon
-                    size={22}
-                    weight={activePage === item.name ? "fill" : "regular"}
-                    color={
-                      item.name === "/Favorites" && activePage === item.name
-                        ? "red"
-                        : undefined
-                    }
-                  />
-                  {width >= 780 && (
+                  {width > 780 && (
+                    <item.icon
+                      size={22}
+                      weight={activePage === item.name ? "fill" : "regular"}
+                      color={
+                        item.name === "/Favorites" && activePage === item.name
+                          ? "red"
+                          : undefined
+                      }
+                    />
+                  )}
+                  {(width > 600 && width <= 780) || width > 780 ? (
                     <p
                       style={{
                         fontSize: "17px",
@@ -140,7 +113,7 @@ const Navbar = () => {
                     >
                       {item.label}
                     </p>
-                  )}
+                  ) : null}
                 </div>
               ))}
             </>
