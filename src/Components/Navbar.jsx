@@ -6,22 +6,20 @@ import {
   PlusCircle,
   UserCircle,
 } from "@phosphor-icons/react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [activePage, setActivePage] = useState(location.pathname);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace with actual login state
   const { width } = useViewportSize();
 
   const navItems = [
-    { name: "/", icon: House, label: "Home" },
-    { name: "/Add Recipe", icon: PlusCircle, label: "Add Recipe" },
-    { name: "/Favorites", icon: Heart, label: "Favorites", color: "red" },
-    { name: "/Profile", icon: UserCircle, label: "Nawang" },
+    { path: "/", icon: House, label: "Home" },
+    { path: "/Add Recipe", icon: PlusCircle, label: "Add Recipe" },
+    { path: "/Favorites", icon: Heart, label: "Favorites", color: "red" },
+    { path: "/Profile", icon: UserCircle, label: "Nawang" },
   ];
 
   return (
@@ -52,10 +50,7 @@ const Navbar = () => {
             gap: "4px",
             cursor: "pointer",
           }}
-          onClick={() => {
-            navigate("/");
-            setActivePage("/");
-          }}
+          onClick={() => navigate("/")}
         >
           <BowlSteam size={32} />
           <p
@@ -84,9 +79,7 @@ const Navbar = () => {
                   borderRadius: "5px",
                   marginLeft: "5px",
                 }}
-                onClick={() => {
-                  navigate("/Login");
-                }}
+                onClick={() => navigate("/Login")}
               >
                 Login
               </div>
@@ -98,9 +91,7 @@ const Navbar = () => {
                   borderRadius: "5px",
                   marginLeft: "5px",
                 }}
-                onClick={() => {
-                  navigate("/Register");
-                }}
+                onClick={() => navigate("/Register")}
               >
                 Register
               </div>
@@ -108,40 +99,36 @@ const Navbar = () => {
           ) : (
             <>
               {navItems.map((item) => (
-                <div
+                <NavLink
                   key={item.label}
-                  onClick={() => {
-                    // navigate(item.name);
-                    setActivePage(item.name);
-                  }}
-                  style={{
+                  to={item.path}
+                  style={({ isActive }) => ({
                     display: "flex",
                     gap: "5px",
                     alignItems: "center",
                     cursor: "pointer",
                     padding: "5px 15px",
-                  }}
+                    fontWeight: isActive ? "bold" : "500",
+                    color: isActive && item.color ? item.color : undefined,
+                    textDecoration: "none",
+                  })}
+                  end
                 >
                   <item.icon
                     size={22}
-                    weight={activePage === item.name ? "fill" : "regular"}
-                    color={
-                      item.name === "/Favorites" && activePage === item.name
-                        ? "red"
-                        : undefined
-                    }
+                    weight={item.path === location.pathname ? "fill" : "regular"}
                   />
                   {width >= 780 && (
                     <p
                       style={{
                         fontSize: "17px",
-                        fontWeight: activePage === item.name ? "bold" : "500",
+                        fontWeight: item.path === location.pathname ? "bold" : "500",
                       }}
                     >
                       {item.label}
                     </p>
                   )}
-                </div>
+                </NavLink>
               ))}
             </>
           )}
