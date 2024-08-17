@@ -3,6 +3,7 @@ import { Text } from "@mantine/core";
 import SearchBar from "../../Components/SearchBar";
 import RecipeCard from "../../Components/RecipeCard";
 //tstt
+//tstt
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
