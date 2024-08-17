@@ -8,7 +8,7 @@ import {
   Group,
   ActionIcon,
 } from "@mantine/core";
-import { IconHeart } from "@tabler/icons-react";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
   const navigate = useNavigate();
@@ -24,8 +24,9 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
       <Card.Section>
         <Image src={recipe.image} height={160} alt={recipe.name} />
         <ActionIcon
-          variant={isFavorited ? "filled" : "light"}
-          color="red"
+          variant={"filled"}
+          color="rgba(255, 255, 255, 1)"
+          radius={"lg"}
           onClick={() => onToggleFavorite(recipe)}
           style={{
             position: "absolute",
@@ -33,7 +34,11 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
             right: 10,
           }}
         >
-          <IconHeart size={24} />
+          {isFavorited ? (
+            <IconHeartFilled color="red" size={18} />
+          ) : (
+            <IconHeart color="red" size={18} />
+          )}
         </ActionIcon>
       </Card.Section>
 
