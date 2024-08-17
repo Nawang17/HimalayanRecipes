@@ -1,44 +1,41 @@
-import { Card, Avatar, Text, Group, Button } from '@mantine/core';
+import { Card, Avatar, Text, Group } from "@mantine/core";
+import useAuth from "../../Hooks/useAuth";
 
 const Profile = () => {
-  const user = {
-    name: 'Nawang',
-    initials: 'NS',
-    email: 'nawang@example.com',
-    userRecipes: ["ShaMomo", "Tingmo"]
-  };
+  const { user } = useAuth();
 
   return (
-    <div style={{ maxWidth: 600, margin: 'auto', padding: '20px' }}>
+    <div style={{ maxWidth: 600, margin: "auto", padding: "20px" }}>
       <Card withBorder padding="xl" radius="md">
         <Card.Section
           h={140}
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            backgroundImage:
+              "url(https://i.pinimg.com/originals/41/d7/19/41d7198d3cdd94cf1f2b5956bd10851b.jpg)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
-        
+
         <Avatar
           color="purple"
           size={80}
           radius={80}
           mx="auto"
           mt={-30}
-          style={{ border: '2px solid white' }}
-        >
-        {user.initials}
-        </Avatar>
+          style={{ border: "2px solid white" }}
+          src={user?.photoURL}
+        />
+
         <Text align="center" size="lg" weight={500} mt="sm">
-          {user.name}
+          {user?.displayName}
         </Text>
-        <Text align="center" size="sm" color="dimmed">
-          {user.email}
-        </Text>
+
         <Group mt="md" direction="column" align="center">
-          <Text size="lg" weight={500}>My Recipes:</Text>
-          <Group spacing="sm" direction="column" align="center">
+          <Text size="lg" weight={500}>
+            My Recipes:
+          </Text>
+          {/* <Group spacing="sm" direction="column" align="center">
             {user.userRecipes.length > 0 ? (
               user.userRecipes.map((recipe, index) => (
                 <Text key={index} size="sm">
@@ -46,14 +43,11 @@ const Profile = () => {
                 </Text>
               ))
             ) : (
-              <Text size="sm" color="dimmed">No recipes available</Text>
+              <Text size="sm" c="dimmed">
+                No recipes available
+              </Text>
             )}
-          </Group>
-        </Group>
-        <Group mt="md" position="center">
-          <Button variant="outline" color="red">
-            Logout
-          </Button>
+          </Group> */}
         </Group>
       </Card>
     </div>

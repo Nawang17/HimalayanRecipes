@@ -8,7 +8,7 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate("/recipe/8461l8uXPtSbAQUmJ5FR");
+    navigate(`/recipe/${recipe.id}`);
   };
 
   return (

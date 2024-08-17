@@ -1,13 +1,5 @@
-import { Menu, rem, ActionIcon, Avatar } from "@mantine/core";
-import {
-  IconMenu2,
-  IconHome,
-  IconPlus,
-  IconHeart,
-  IconUser,
-  IconLogin,
-  IconUserPlus,
-} from "@tabler/icons-react";
+import { Menu, ActionIcon, Avatar } from "@mantine/core";
+
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import { signOut } from "firebase/auth";
@@ -16,7 +8,7 @@ import { SignOut, UserCircle } from "@phosphor-icons/react";
 import { notifications } from "@mantine/notifications";
 
 export default function ProfileMenu() {
-  const { isLoggedIn, user, loading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const handleLogout = () => {
     signOut(auth)
@@ -58,7 +50,7 @@ export default function ProfileMenu() {
 
       <Menu.Dropdown>
         <Menu.Item
-          // onClick={() => navigate(item.name)}
+          onClick={() => navigate("/Profile")}
           leftSection={<UserCircle size={20} />}
         >
           View Profile

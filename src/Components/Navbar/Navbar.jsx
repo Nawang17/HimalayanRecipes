@@ -3,22 +3,24 @@ import { BowlSteam, Heart, House, PlusCircle } from "@phosphor-icons/react";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
 import useAuth from "../../Hooks/useAuth";
-import { Avatar, Button } from "@mantine/core";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase";
+import { Button } from "@mantine/core";
 import ProfileMenu from "./Components/Profilemenu";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isLoggedIn, user } = useAuth();
-
+  const { isLoggedIn } = useAuth();
   const { width } = useViewportSize();
   const [activePage, setActivePage] = useState(location.pathname);
 
   const navItems = [
-    { name: "/", icon: House, label: "Home" },
-    { name: "/CreateRecipe", icon: PlusCircle, label: "Create Recipe" },
+    { name: "/", icon: House, label: "Home", color: "black" },
+    {
+      name: "/CreateRecipe",
+      icon: PlusCircle,
+      label: "Create Recipe",
+      color: "black",
+    },
     { name: "/Favorites", icon: Heart, label: "Favorites", color: "red" },
   ];
 
@@ -92,7 +94,7 @@ const Navbar = () => {
                     cursor: "pointer",
                     padding: "5px 15px",
                     fontWeight: isActive ? "bold" : "500",
-                    color: isActive && item.color ? item.color : undefined,
+                    color: isActive && item.color ? item.color : "black",
                     textDecoration: "none",
                   }}
                 >
