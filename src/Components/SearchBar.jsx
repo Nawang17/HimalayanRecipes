@@ -1,7 +1,7 @@
-import React from 'react';
-import { Input } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { Input } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 
+// eslint-disable-next-line react/prop-types
 function SearchBar({ searchTerm, setSearchTerm }) {
   return (
     <Input
