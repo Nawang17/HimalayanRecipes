@@ -10,6 +10,7 @@ import Register from "./Pages/Register/Register";
 import Navbar from "./Components/Navbar/Navbar";
 import CreateRecipe from "./Pages/CreateRecipe/CreateRecipe";
 import RecipeDisplay from "./Pages/RecipeDisplay/RecipeDisplay";
+import Profile from "./Pages/Profile/Profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -62,6 +63,15 @@ function App() {
       element: (
         <>
           <Navbar /> <RecipeDisplay />,
+        </>
+      ),
+    },
+    {
+      path: "/Profile",
+
+      element: (
+        <>
+          <Navbar /> <Profile />,
         </>
       ),
     },
