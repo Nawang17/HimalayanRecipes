@@ -16,9 +16,10 @@ import { HandWaving, WarningCircle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { notifications } from "@mantine/notifications";
+
 const Login = () => {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const auth = getAuth();
   const { isLoggedIn } = useAuth();
   useEffect(() => {
@@ -30,28 +31,53 @@ const Login = () => {
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const handleDemoLogin = () => {
+    const demoemail = "demo@gmail.com";
+    const demopassword = "demo123";
+    setEmail(demoemail);
+    setPassword(demopassword);
 
-  const handeleLogin = () => {
     setError("");
-    signInWithEmailAndPassword(auth, email, password)
+    setLoading(true);
+    signInWithEmailAndPassword(auth, demoemail, demopassword)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
         navigate("/");
         notifications.show({
-          title: "Welcome back!",
+          title: `Welcome back ${user.displayName}`,
           message: "You have successfully logged in",
           color: "teal",
           position: "bottom-center",
           icon: <HandWaving size={18} />,
         });
-        // ...
       })
       .catch((error) => {
         const errorMessage = error.message;
         setError(errorMessage);
-        console.log(errorMessage);
+        setLoading(false);
+      });
+  };
+  const handleLogin = () => {
+    setError("");
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/");
+        notifications.show({
+          title: `Welcome back ${user.displayName}`,
+          message: "You have successfully logged in",
+          color: "teal",
+          position: "bottom-center",
+          icon: <HandWaving size={18} />,
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        setLoading(false);
       });
   };
   return (
@@ -92,8 +118,22 @@ const Login = () => {
           mt="md"
         />
 
-        <Button onClick={handeleLogin} fullWidth mt="xl">
+        <Button
+          loading={loading}
+          onClick={() => handleLogin()}
+          fullWidth
+          mt="xl"
+        >
           Sign in
+        </Button>
+        <Button
+          color="black"
+          variant="outline"
+          onClick={() => handleDemoLogin()}
+          fullWidth
+          mt="sm"
+        >
+          Try Demo Account
         </Button>
       </Paper>
     </Container>

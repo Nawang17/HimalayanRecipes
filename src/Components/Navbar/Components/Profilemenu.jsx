@@ -19,8 +19,13 @@ export default function ProfileMenu() {
           color: "gray",
           position: "bottom-center",
         });
-        navigate("/");
-        location.reload();
+
+        // Delay the reload by 2 seconds (2000 milliseconds)
+        setTimeout(() => {
+          navigate("/");
+          location.reload();
+        }, 2000);
+
         // Sign-out successful.
       })
       .catch((error) => {
