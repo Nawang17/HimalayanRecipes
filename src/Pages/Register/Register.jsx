@@ -16,7 +16,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { WarningCircle } from "@phosphor-icons/react";
+import { Smiley, WarningCircle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { notifications } from "@mantine/notifications";
@@ -79,6 +79,7 @@ const Login = () => {
               message: "You have successfully registered",
               color: "teal",
               position: "bottom-center",
+              icon: <Smiley size={18} />,
             });
             navigate("/");
           })

@@ -12,7 +12,7 @@ import {
 import classes from "./AuthenticationTitle.module.css";
 import { useEffect, useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { WarningCircle } from "@phosphor-icons/react";
+import { HandWaving, WarningCircle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { notifications } from "@mantine/notifications";
@@ -44,6 +44,7 @@ const Login = () => {
           message: "You have successfully logged in",
           color: "teal",
           position: "bottom-center",
+          icon: <HandWaving size={18} />,
         });
         // ...
       })
