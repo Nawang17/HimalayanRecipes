@@ -20,6 +20,7 @@ export default function ProfileMenu() {
           position: "bottom-center",
         });
         navigate("/");
+        location.reload();
         // Sign-out successful.
       })
       .catch((error) => {

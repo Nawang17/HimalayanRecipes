@@ -4,7 +4,6 @@ import {
   Paper,
   Title,
   Container,
-  Group,
   Button,
   Alert,
   Text,
@@ -22,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { notifications } from "@mantine/notifications";
 import confetti from "canvas-confetti";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -47,10 +48,18 @@ const Login = () => {
       return;
     }
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
         console.log(user);
+
+        //add user to users collection
+        await setDoc(doc(db, "users", user.uid), {
+          username: username,
+          email: email,
+          photoURL: `https://ui-avatars.com/api/?background=106cad&color=fff&name=${username[0]}&size=128`,
+          favorites: [],
+        });
 
         // update username
         updateProfile(auth.currentUser, {

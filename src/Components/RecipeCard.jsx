@@ -29,7 +29,8 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
         <ActionIcon
           variant={"filled"}
           color="rgba(255, 255, 255, 1)"
-          radius={"lg"}
+          radius={"xl"}
+          size={"lg"}
           onClick={(e) => {
             e.stopPropagation(); // Prevent the click from triggering the card navigation
             onToggleFavorite(recipe);
@@ -41,9 +42,9 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
           }}
         >
           {isFavorited ? (
-            <IconHeartFilled color="red" size={18} />
+            <IconHeartFilled color="red" size={19} />
           ) : (
-            <IconHeart color="red" size={18} />
+            <IconHeart color="red" size={19} />
           )}
         </ActionIcon>
         <Badge

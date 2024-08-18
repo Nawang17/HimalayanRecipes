@@ -15,7 +15,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
-
+import uniqid from "uniqid";
 const CreateRecipe = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -86,6 +86,7 @@ const CreateRecipe = () => {
       userId: user.uid,
       avgRating: "0",
       username: user.displayName,
+      randomId: uniqid(),
       // Default avgRating to 0
     };
     try {

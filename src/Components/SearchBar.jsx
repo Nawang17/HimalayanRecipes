@@ -7,6 +7,7 @@ function SearchBar({ searchTerm, setSearchTerm }) {
     <Input
       placeholder="Search for a recipe..."
       value={searchTerm}
+      size="md"
       onChange={(event) => setSearchTerm(event.currentTarget.value)}
       leftSection={<IconSearch size={16} />}
     />
