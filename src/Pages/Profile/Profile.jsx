@@ -1,8 +1,31 @@
-import { Card, Avatar, Text, Group } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Card, Avatar, Text, Group, Loader } from "@mantine/core";
 import useAuth from "../../Hooks/useAuth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 const Profile = () => {
   const { user } = useAuth();
+  const [userRecipes, setUserRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUserRecipes() {
+      if (user?.uid) {
+        const recipesCollection = collection(db, "recipes");
+        const q = query(recipesCollection, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        const fetchedRecipes = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setUserRecipes(fetchedRecipes);
+        setLoading(false);
+      }
+    }
+
+    fetchUserRecipes();
+  }, [user?.uid]);
 
   return (
     <div style={{ maxWidth: 600, margin: "auto", padding: "20px" }}>
@@ -35,19 +58,19 @@ const Profile = () => {
           <Text size="lg" weight={500}>
             My Recipes:
           </Text>
-          {/* <Group spacing="sm" direction="column" align="center">
-            {user.userRecipes.length > 0 ? (
-              user.userRecipes.map((recipe, index) => (
-                <Text key={index} size="sm">
-                  {recipe}
-                </Text>
-              ))
-            ) : (
-              <Text size="sm" c="dimmed">
-                No recipes available
+          {loading ? (
+            <Loader color="blue" />
+          ) : userRecipes.length > 0 ? (
+            userRecipes.map((recipe) => (
+              <Text key={recipe.id} size="sm">
+                {recipe.recipeName}
               </Text>
-            )}
-          </Group> */}
+            ))
+          ) : (
+            <Text size="sm" c="dimmed">
+              No recipes available
+            </Text>
+          )}
         </Group>
       </Card>
     </div>
