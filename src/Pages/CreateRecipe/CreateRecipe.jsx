@@ -84,7 +84,7 @@ const CreateRecipe = () => {
       steps,
       image,
       userId: user.uid,
-      avgRating: "0",
+      averageRating: 0,
       username: user.displayName,
       randomId: uniqid(),
       // Default avgRating to 0

@@ -67,7 +67,9 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
         <Text fw={600}>{recipe?.recipeName}</Text>
         <Flex align={"center"} gap={5}>
           <Star weight="fill" color="orange" size={20} />
-          <Text fw={600}>{recipe?.avgRating}</Text>
+          <Text fw={600}>
+            {recipe?.averageRating > 1 ? recipe?.averageRating : 0}
+          </Text>
         </Flex>
       </Flex>
 
