@@ -7,10 +7,18 @@ import {
   Textarea,
   Button,
   ActionIcon,
+  Alert,
 } from "@mantine/core";
-import { Trash } from "@phosphor-icons/react";
+import { Trash, WarningCircle } from "@phosphor-icons/react";
+import useAuth from "../../Hooks/useAuth";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../firebase";
+import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
 
 const CreateRecipe = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]);
   const [steps, setSteps] = useState([""]);
   const [tags, setTags] = useState(""); // State for tags
@@ -18,7 +26,7 @@ const CreateRecipe = () => {
   const [cookingTime, setCookingTime] = useState(""); // State for cooking time
   const [description, setDescription] = useState(""); // State for description
   const [image, setImage] = useState(null); // State for the image
-
+  const [loading, setLoading] = useState(false);
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { name: "", quantity: "" }]);
   };
@@ -50,8 +58,23 @@ const CreateRecipe = () => {
   const handleTagsChange = (e) => {
     setTags(e.target.value);
   };
-
-  const handleCreateRecipe = () => {
+  const [error, setError] = useState(null);
+  const handleCreateRecipe = async () => {
+    setLoading(true);
+    if (
+      !recipeName ||
+      !cookingTime ||
+      !description ||
+      !tags ||
+      !ingredients ||
+      !steps ||
+      !image
+    ) {
+      setError("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+    setError(null);
     const recipeData = {
       recipeName,
       cookingTime,
@@ -59,9 +82,28 @@ const CreateRecipe = () => {
       tags,
       ingredients,
       steps,
-      image, // Include image data
+      image,
+      userId: user.uid,
+      avgRating: "0",
+      username: user.displayName,
+      // Default avgRating to 0
     };
-    console.log("Recipe Data:", recipeData);
+    try {
+      const docRef = await addDoc(collection(db, "recipes"), recipeData);
+      notifications.show({
+        title: "Recipe created",
+        message: "Your recipe has been created successfully",
+        color: "blue",
+        position: "bottom-center",
+      });
+      navigate("/");
+      console.log("Document written with ID: ", docRef.id);
+      setLoading(false);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      setError(e);
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -86,6 +128,11 @@ const CreateRecipe = () => {
       <Text pt={10} size="xl" fw={600}>
         🍲 Create a new recipe
       </Text>
+      {error && (
+        <Alert variant="light" color="red" icon={<WarningCircle size={32} />}>
+          {error}
+        </Alert>
+      )}
 
       <Input.Wrapper
         mt={10}
@@ -264,6 +311,7 @@ const CreateRecipe = () => {
         }}
       >
         <Button
+          loading={loading}
           style={{ width: "100%" }}
           mt={30}
           color="green"

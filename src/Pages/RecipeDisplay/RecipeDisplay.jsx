@@ -78,7 +78,7 @@ const RecipeDisplay = () => {
           <Text size="md" mt={10}>
             Submitted by{" "}
             <Text c="blue" fw={500} component="span">
-              Kyikyi
+              {recipe?.username}
             </Text>
           </Text>
           <Text size="md" mt={10}>

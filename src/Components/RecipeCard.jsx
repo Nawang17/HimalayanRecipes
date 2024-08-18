@@ -71,7 +71,7 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
       </Flex>
 
       <Text size="sm" c="dimmed">
-        {recipe?.description?.split(" ").slice(0, 15).join(" ")}...
+        {recipe?.description?.split(" ").slice(0, 30).join(" ")}...
       </Text>
       <Flex align={"center"} wrap={"wrap"} mt="md" gap={8}>
         {recipe.tags?.split(",").map((tag, index) => (
