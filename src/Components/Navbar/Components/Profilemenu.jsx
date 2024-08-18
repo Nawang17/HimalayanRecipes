@@ -56,7 +56,7 @@ export default function ProfileMenu() {
 
       <Menu.Dropdown>
         <Menu.Item
-          onClick={() => navigate("/Profile")}
+          onClick={() => navigate(`/Profile/${user.uid}`)}
           leftSection={<UserCircle size={20} />}
         >
           View Profile

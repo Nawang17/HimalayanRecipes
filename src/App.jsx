@@ -68,7 +68,7 @@ function App() {
       ),
     },
     {
-      path: "/Profile",
+      path: "/Profile/:userId",
 
       element: (
         <>

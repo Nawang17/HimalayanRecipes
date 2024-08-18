@@ -12,7 +12,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { ArrowLeft, Clock } from "@phosphor-icons/react";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../../firebase";
@@ -22,29 +22,27 @@ const RecipeDisplay = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { recipeId } = useParams();
-  console.log(recipeId);
   useEffect(() => {
     async function fetchRecipe() {
       try {
-        const recipeRef = doc(db, "recipes", recipeId);
-        const recipeSnap = await getDoc(recipeRef);
+        const recipesRef = collection(db, "recipes"); // Reference to the 'recipes' collection
+        const q = query(recipesRef, where("randomId", "==", recipeId)); // Query for the document with the specified randomId
 
-        if (recipeSnap.exists()) {
-          setRecipe(recipeSnap.data());
-          console.log(recipeSnap.data());
+        const recipeSnap = await getDocs(q); // Get all documents matching the query
+
+        if (!recipeSnap.empty) {
+          const recipeData = recipeSnap.docs[0].data(); // Access the data of the first document
+          setRecipe(recipeData); // Set the recipe data to state
           setLoading(false);
-          // Set the recipe data to state
         } else {
           console.log("No such recipe!");
-          // Set loading to false once fetching is done
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching recipe:", error);
-      } finally {
-        setLoading(false); // Set loading to false once fetching is done
+        setLoading(false);
       }
     }
-
     fetchRecipe(); // Call the async function to fetch the recipe
   }, [recipeId]); // Dependency array to re-run the effect if recipeId changes
   return (
@@ -77,7 +75,17 @@ const RecipeDisplay = () => {
           </Flex>
           <Text size="md" mt={10}>
             Submitted by{" "}
-            <Text c="blue" fw={500} component="span">
+            <Text
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                navigate(`/profile/${recipe?.userId}`);
+              }}
+              c="blue"
+              fw={500}
+              component="span"
+            >
               {recipe?.username}
             </Text>
           </Text>
