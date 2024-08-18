@@ -67,7 +67,7 @@ const Navbar = () => {
               color: "#003366",
             }}
           >
-            HimalayaEats
+            {width > 410 ? "HimalayaEats" : "HE"}
           </p>
         </div>
         <div

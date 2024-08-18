@@ -4,11 +4,14 @@ import SearchBar from "../../Components/SearchBar";
 import RecipeCard from "../../Components/RecipeCard";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
+import { useViewportSize } from "@mantine/hooks";
 function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { width } = useViewportSize();
+
   useEffect(() => {
     async function getAllRecipes() {
       const recipesCollection = collection(db, "recipes");
@@ -28,33 +31,6 @@ function Home() {
     });
     getAllRecipes();
   }, []);
-
-  // const recipes = [
-  //   {
-  //     name: "ShaMomos",
-  //     image:
-  //       "https://data.tibettravel.org/assets/images/tibetan-food/momo11.jpg",
-  //     cookTime: 45,
-  //     avgRating: 4.8,
-  //     description: "Delicious dumplings filled with meat.",
-  //   },
-  //   {
-  //     name: "Tingmo",
-  //     image:
-  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu9bnwA_Ny2wUfuJcuMf_JhhTY4Smq27ekLA&s",
-  //     cookTime: 20,
-  //     avgRating: 3.5,
-  //     description: "A soft, fluffy steamed bun.",
-  //   },
-  //   {
-  //     name: "Tibetan Butter Tea",
-  //     image:
-  //       "https://cdn.shopify.com/s/files/1/2669/5944/files/butter_tea_shutterstock_333184121_600x600.jpg?v=1612914596",
-  //     cookTime: 8,
-  //     avgRating: 3.1,
-  //     description: "A salty tea made with yak butter and salt",
-  //   },
-  // ];
 
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.recipeName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -125,9 +101,14 @@ function Home() {
           ) : (
             <div
               style={{
-                display: "flex",
+                display: "grid",
                 gap: "20px",
-                flexWrap: "wrap",
+                gridTemplateColumns:
+                  width > 980
+                    ? "repeat(3, 1fr)"
+                    : width > 478
+                    ? "repeat(2, 1fr)"
+                    : "repeat(1, 1fr)",
               }}
             >
               {recipes.map((recipe, index) => (

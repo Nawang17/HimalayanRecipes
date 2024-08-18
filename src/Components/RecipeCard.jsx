@@ -15,7 +15,7 @@ function RecipeCard({ recipe, isFavorited, onToggleFavorite }) {
     <Card
       onClick={handleCardClick}
       style={{
-        width: "300px",
+        width: "100%",
         position: "relative",
         cursor: "pointer",
       }}
